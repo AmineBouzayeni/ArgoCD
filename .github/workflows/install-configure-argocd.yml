@@ -10,7 +10,6 @@ jobs:
   InstallAndConfigureArgoCD:
     name: Install and configure ArgoCD.
     runs-on: ubuntu-latest
-    permissions: write-all
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
 
@@ -38,7 +37,12 @@ jobs:
           ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_NAME }}
       - name: Install and configure ArgoCD
         run: |
-            kubectl create namespace argocd
+            if [[ $(kubectl get namespaces | grep -c argocd) == 0 ]]
+                then
+                    kubectl create namespace argocd
+            else
+                echo "Namespace already exist"
+            fi            
             kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
             # Apply ArgoCD config file
             kubectl apply -f argocd-app.yml
