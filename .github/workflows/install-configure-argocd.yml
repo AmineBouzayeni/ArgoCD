@@ -43,6 +43,6 @@ jobs:
             else
                 echo "Namespace already exist"
             fi            
-            kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
+            kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
             # Apply ArgoCD config file
             kubectl apply -f argocd-app.yml
